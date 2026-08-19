@@ -3,7 +3,7 @@
 Um portfólio desenvolvido para apresentar meus projetos, experiências e trajetória na área de computação
 
 # 🎨 Wireframe Inicial
-![Wireframe do Portfólio](/images/portfolio-wireframe.pdf)
+[Wireframe do Portfólio](/images/portfolio-wireframe.pdf)
 
 ## 🚀 Tecnologias Utilizadas
 
