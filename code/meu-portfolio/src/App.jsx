@@ -1,6 +1,101 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Mail, Phone, CheckCircle, AlertCircle } from 'lucide-react';
 
+const content = {
+  pt: {
+    nav: { about: 'Sobre Mim', projects: 'Projetos', exp: 'Experiências', contact: 'Contato' },
+    hero: {
+      title: 'Caio Kfuri',
+      subtitle: 'Engenheiro de Software & Estagiário de TI',
+      desc: 'Apaixonado por tecnologia desde cedo, encontrei na programação a capacidade de criar soluções e resolver problemas. Tenho 19 anos, curso o 4º período de Engenharia de Software e sou estagiário de infraestrutura na Aliança Energia, unindo a vivência corporativa ao desenvolvimento de software.',
+      btnProjects: '+ Ver Projetos',
+      btnContact: 'Entrar em Contato'
+    },
+    projects: {
+      title: 'Projetos',
+      desc: 'Linha do tempo cronológica com meus trabalhos mais recentes.',
+      items: [
+        { date: 'Março 2026', name: 'Sistema de Barbearia', desc: 'Projeto de prática full-stack focado no desenvolvimento de uma plataforma de gestão para barbearias, treinando a integração do backend com o frontend.' },
+        { date: 'Janeiro 2026', name: 'Portfólio Pessoal', desc: 'Single Page Application (SPA) desenvolvida em React e Vite para apresentação da minha trajetória acadêmica e profissional.' },
+        { date: 'Outubro 2025', name: 'MuuFarm', desc: 'Sistema de gestão de gado de corte, desenvolvido como projeto acadêmico em grupo na universidade.' }
+      ]
+    },
+    exp: {
+      title: 'Experiências',
+      desc: 'Minha trajetória acadêmica e profissional atual.',
+      items: [
+        { 
+          title: 'Estagiário de Suporte de TI | Help Desk', 
+          date: 'Jan 2024 - Atual', 
+          desc: '• Integração Corporativa: Configuração em massa de máquinas durante a aquisição da empresa.\n• Gestão de Chamados: Atendimento N1 e N2 (SLA), reduzindo o tempo de espera dos usuários.\n• Manutenção & Onboarding: Setup de hardware, impressoras de rede e preparação de equipamentos para novos funcionários.' 
+        },
+        { 
+          title: 'Bacharelado em Engenharia de Software', 
+          date: '2024 - 2028', 
+          desc: 'Pontifícia Universidade Católica de Minas Gerais (PUC-Minas).' 
+        }
+      ]
+    },
+    contact: {
+      title: 'Contato',
+      desc: 'Buscando novas parcerias ou apenas trocar ideias? Fale Comigo!',
+      nameLabel: 'Nome',
+      emailLabel: 'E-mail',
+      msgLabel: 'Mensagem',
+      btnSend: 'Enviar Mensagem',
+      formEmptyError: 'Por favor, preencha todos os campos.',
+      formEmailError: 'Por favor, insira um e-mail válido.',
+      formSuccess: 'Mensagem enviada com sucesso!'
+    }
+  },
+  en: {
+    nav: { about: 'About Me', projects: 'Projects', exp: 'Experiences', contact: 'Contact' },
+    hero: {
+      title: 'Caio Kfuri',
+      subtitle: 'Software Engineer & IT Intern',
+      desc: 'Passionate about technology since childhood, I found in programming the ability to create solutions and solve problems. I am 19 years old, in my 4th semester of Software Engineering, and currently an infrastructure intern at Aliança Energia, combining corporate experience with software development.',
+      btnProjects: '+ View Projects',
+      btnContact: 'Get in Touch'
+    },
+    projects: {
+      title: 'Projects',
+      desc: 'Chronological timeline featuring my recent work.',
+      items: [
+        { date: 'March 2026', name: 'Barbershop Management', desc: 'Full-stack practice project focused on building a management platform for barbershops, training frontend and backend integration.' },
+        { date: 'January 2026', name: 'Personal Portfolio', desc: 'Single Page Application (SPA) developed with React and Vite to showcase my academic and professional journey.' },
+        { date: 'October 2025', name: 'MuuFarm', desc: 'Collaborative cattle management system developed as a group academic project.' }
+      ]
+    },
+    exp: {
+      title: 'Experiences',
+      desc: 'My academic and current professional background.',
+      items: [
+        { 
+          title: 'IT Support Intern | Help Desk', 
+          date: 'Jan 2024 - Present', 
+          desc: "• Corporate Integration: Mass workstation configuration during a company acquisition.\n• Ticket Management: Tier 1 and 2 support (SLA), reducing user wait times.\n• Maintenance & Onboarding: Hardware setup, network printers, and equipment preparation for new hires." 
+        },
+        { 
+          title: 'B.S. in Software Engineering', 
+          date: '2024 - 2028', 
+          desc: 'Pontifícia Universidade Católica de Minas Gerais (PUC-Minas).' 
+        }
+      ]
+    },
+    contact: {
+      title: 'Contact',
+      desc: 'Looking for new partnerships or just want to chat? Get in touch!',
+      nameLabel: 'Name',
+      emailLabel: 'Email',
+      msgLabel: 'Message',
+      btnSend: 'Send Message',
+      formEmptyError: 'Please fill in all fields.',
+      formEmailError: 'Please enter a valid email address.',
+      formSuccess: 'Message sent successfully!'
+    }
+  }
+};
+
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('pt');
@@ -24,7 +119,7 @@ export default function App() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.message) {
@@ -40,107 +135,37 @@ export default function App() {
       return;
     }
 
-    setFormStatus('success');
-    setFormData({ name: '', email: '', message: '' });
+    setFormStatus('sending');
+
+    try {
+      const payload = new FormData();
+      payload.append("access_key", "00c08109-e838-46fd-8253-1992a3997be1");
+      payload.append("name", formData.name);
+      payload.append("email", formData.email);
+      payload.append("message", formData.message);
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: payload
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setFormStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setFormStatus('error');
+        setFormError(language === 'pt' ? 'Erro ao enviar. Tente novamente.' : 'Error sending. Try again.');
+      }
+    } catch (error) {
+      setFormStatus('error');
+      setFormError(language === 'pt' ? 'Erro de conexão.' : 'Connection error.');
+    }
     
     setTimeout(() => {
       setFormStatus('idle');
     }, 4000);
-  };
-
-  const content = {
-    pt: {
-      nav: { about: 'Sobre Mim', projects: 'Projetos', exp: 'Experiências', contact: 'Contato' },
-      hero: {
-        title: 'Caio Kfuri',
-        subtitle: 'Engenheiro de Software & Estagiário de TI',
-        desc: 'Apaixonado por tecnologia desde cedo, encontrei na programação a capacidade de criar soluções e resolver problemas. Tenho 19 anos, curso o 4º período de Engenharia de Software e sou estagiário de infraestrutura na Aliança Energia',
-        btnProjects: '+ Ver Projetos',
-        btnContact: 'Entrar em Contato'
-      },
-      projects: {
-        title: 'Projetos',
-        desc: 'Linha do tempo cronológica com meus trabalhos mais recentes.',
-        items: [
-          { date: 'Março 2026', name: 'Sistema de Barbearia', desc: 'Projeto de prática full-stack focado no desenvolvimento de uma plataforma de gestão para barbearias, treinando a integração do backend com o frontend.' },
-          { date: 'Janeiro 2026', name: 'Portfólio Pessoal', desc: 'Single Page Application (SPA) desenvolvida em React e Vite para apresentação da minha trajetória acadêmica e profissional.' },
-          { date: 'Outubro 2025', name: 'MuuFarm', desc: 'Sistema de gestão de gado de corte, desenvolvido como projeto acadêmico em grupo na universidade.' }
-        ]
-      },
-      exp: {
-        title: 'Experiências',
-        desc: 'Minha trajetória acadêmica e profissional atual.',
-        items: [
-          { 
-            title: 'Estagiário de Suporte de TI | Help Desk', 
-            date: 'Jan 2024 - Atual', 
-            desc: '• Integração Corporativa: Configuração em massa de máquinas durante a aquisição da empresa.\n• Gestão de Chamados: Atendimento N1 e N2 (SLA), reduzindo o tempo de espera dos usuários.\n• Manutenção & Onboarding: Setup de hardware, impressoras de rede e preparação de equipamentos para novos funcionários, além da integração dos mesmos.' 
-          },
-          { 
-            title: 'Bacharelado em Engenharia de Software', 
-            date: '2024 - 2028', 
-            desc: 'Pontifícia Universidade Católica de Minas Gerais (PUC-Minas).' 
-          }
-        ]
-      },
-      contact: {
-        title: 'Contato',
-        desc: 'Buscando novas parcerias ou apenas trocar ideias? Fale Comigo!',
-        nameLabel: 'Nome',
-        emailLabel: 'E-mail',
-        msgLabel: 'Mensagem',
-        btnSend: 'Enviar Mensagem',
-        formEmptyError: 'Por favor, preencha todos os campos.',
-        formEmailError: 'Por favor, insira um e-mail válido.',
-        formSuccess: 'Mensagem enviada com sucesso!'
-      }
-    },
-    en: {
-      nav: { about: 'About Me', projects: 'Projects', exp: 'Experiences', contact: 'Contact' },
-      hero: {
-        title: 'Caio Kfuri',
-        subtitle: 'Software Engineer & IT Intern',
-        desc: 'Passionate about technology since childhood, I found in programming the ability to create solutions and solve problems. I am 19 years old, in my 4th semester of Software Engineering, and currently an infrastructure intern at Aliança Energia, combining corporate experience with software development.',
-        btnProjects: '+ View Projects',
-        btnContact: 'Get in Touch'
-      },
-      projects: {
-        title: 'Projects',
-        desc: 'Chronological timeline featuring my recent work.',
-        items: [
-          { date: 'March 2026', name: 'Barbershop Management', desc: 'Full-stack practice project focused on building a management platform for barbershops, training frontend and backend integration.' },
-          { date: 'January 2026', name: 'Personal Portfolio', desc: 'Single Page Application (SPA) developed with React and Vite to showcase my academic and professional journey.' },
-          { date: 'October 2025', name: 'MuuFarm', desc: 'Collaborative cattle management system developed as a group academic project.' }
-        ]
-      },
-      exp: {
-        title: 'Experiences',
-        desc: 'My academic and current professional background.',
-        items: [
-          { 
-            title: 'IT Support Intern | Help Desk', 
-            date: 'Jan 2024 - Present', 
-            desc: "• Corporate Integration: Mass workstation configuration during a company acquisition.\n• Ticket Management: Tier 1 and 2 support (SLA), reducing user wait times.\n• Maintenance & Onboarding: Hardware setup, network printers, and equipment preparation for new hires." 
-          },
-          { 
-            title: 'B.S. in Software Engineering', 
-            date: '2024 - 2028', 
-            desc: 'Pontifícia Universidade Católica de Minas Gerais (PUC-Minas).' 
-          }
-        ]
-      },
-      contact: {
-        title: 'Contact',
-        desc: 'Looking for new partnerships or just want to chat? Get in touch!',
-        nameLabel: 'Name',
-        emailLabel: 'Email',
-        msgLabel: 'Message',
-        btnSend: 'Send Message',
-        formEmptyError: 'Please fill in all fields.',
-        formEmailError: 'Please enter a valid email address.',
-        formSuccess: 'Message sent successfully!'
-      }
-    }
   };
 
   const t = content[language];
@@ -272,8 +297,14 @@ export default function App() {
                 </div>
               )}
 
-              <button type="submit" className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors shadow-md">
-                {t.contact.btnSend}
+              <button 
+                type="submit" 
+                disabled={formStatus === 'sending'}
+                className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {formStatus === 'sending' 
+                  ? (language === 'pt' ? 'Enviando...' : 'Sending...') 
+                  : t.contact.btnSend}
               </button>
             </form>
           </div>
