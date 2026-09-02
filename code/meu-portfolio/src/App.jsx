@@ -13,11 +13,20 @@ const content = {
     },
     projects: {
       title: 'Projetos',
-      desc: 'Linha do tempo cronológica com meus trabalhos mais recentes.',
+      desc: 'Meus trabalhos e desenvolvimentos mais recentes.',
       items: [
-        { date: 'Março 2026', name: 'Sistema de Barbearia', desc: 'Projeto de prática full-stack focado no desenvolvimento de uma plataforma de gestão para barbearias, treinando a integração do backend com o frontend.' },
-        { date: 'Janeiro 2026', name: 'Portfólio Pessoal', desc: 'Single Page Application (SPA) desenvolvida em React e Vite para apresentação da minha trajetória acadêmica e profissional.' },
-        { date: 'Outubro 2025', name: 'MuuFarm', desc: 'Sistema de gestão de gado de corte, desenvolvido como projeto acadêmico em grupo na universidade.' }
+        { 
+          date: 'Agosto 2025', 
+          name: 'Sistema de Controle de Folha de Pagamento', 
+          desc: 'Aplicação desenvolvida para gerenciar o cadastro de funcionários, automatizar o cálculo de salários, descontos e gerar holerites de forma eficiente.',
+          image: '/images/folha.png'
+        },
+        { 
+          date: 'Outubro 2025', 
+          name: 'MuuFarm', 
+          desc: 'Sistema de gestão de gado de corte, focado no controle do rebanho e otimização de processos, desenvolvido como projeto acadêmico em grupo na universidade.',
+          image: '/images/muufarm.png'
+        }
       ]
     },
     exp: {
@@ -59,11 +68,20 @@ const content = {
     },
     projects: {
       title: 'Projects',
-      desc: 'Chronological timeline featuring my recent work.',
+      desc: 'My most recent work and developments.',
       items: [
-        { date: 'March 2026', name: 'Barbershop Management', desc: 'Full-stack practice project focused on building a management platform for barbershops, training frontend and backend integration.' },
-        { date: 'January 2026', name: 'Personal Portfolio', desc: 'Single Page Application (SPA) developed with React and Vite to showcase my academic and professional journey.' },
-        { date: 'October 2025', name: 'MuuFarm', desc: 'Collaborative cattle management system developed as a group academic project.' }
+        { 
+          date: 'August 2025', 
+          name: 'Payroll Management System', 
+          desc: 'Application developed to manage employee records, automate salary and deduction calculations, and generate payslips efficiently.',
+          image: '/images/folha.png'
+        },
+        { 
+          date: 'October 2025', 
+          name: 'MuuFarm', 
+          desc: 'Cattle management system focused on herd control and process optimization, developed as a group academic project.',
+          image: '/images/muufarm.png'
+        }
       ]
     },
     exp: {
@@ -214,13 +232,23 @@ export default function App() {
           <h3 className="text-3xl font-bold mb-2">{t.projects.title}</h3>
           <p className="text-gray-500 dark:text-gray-400 mb-10">{t.projects.desc}</p>
           
-          <div className="relative border-l-2 border-blue-200 dark:border-blue-900 ml-3 md:ml-6 space-y-12">
+          <div className="relative border-l-2 border-blue-200 dark:border-blue-900 ml-3 md:ml-6 space-y-16">
             {t.projects.items.map((proj, index) => (
               <div key={index} className="relative pl-8 md:pl-10">
                 <div className="absolute w-4 h-4 bg-blue-600 dark:bg-blue-500 rounded-full -left-[9px] top-1.5 shadow-sm"></div>
                 <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase">{proj.date}</span>
                 <h4 className="text-xl font-bold text-gray-900 dark:text-white mt-1 mb-2">{proj.name}</h4>
-                <p className="text-gray-600 dark:text-gray-400">{proj.desc}</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-5">{proj.desc}</p>
+                
+                {proj.image && (
+                  <div className="w-full sm:w-3/4 md:w-2/3 rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700">
+                    <img 
+                      src={proj.image} 
+                      alt={proj.name} 
+                      className="w-full h-auto object-cover bg-gray-100 dark:bg-gray-800 aspect-video"
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
