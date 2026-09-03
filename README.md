@@ -2,7 +2,7 @@
 
 Um portfólio desenvolvido para apresentar nossos projetos, experiências e trajetória na área de Engenharia de Software.
 
-🔗 **[Acessar o Portfólio Online na Nuvem](#)** *(Insira o link final do GitHub Pages aqui)*  
+🔗 **[Acessar o Portfólio Online na Nuvem](#)** *[https://caiokfuri-puc.github.io/ps_portfolio/]*  
 🎨 **[Visualizar Wireframe Inicial em PDF](images/wireframePortfolio.pdf)**
 
 ---
